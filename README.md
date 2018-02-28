@@ -43,3 +43,42 @@ Tiếp theo, mở file index.html và trong thẻ <head> thay nội dung với c
  Sau đó, trong mảng NgModule declarations, thêm PostsComponent:<br>
  
  <img src="https://i.imgur.com/rVEqeDh.png"><br> 
+
+<h2>Hiển thị ứng dụng Angular</h2>
+
+Sau khi đăng ký Posts component, chúng ta sẽ include nó trong ./src/app/app.component.html file để posts component được hiển thị. Mở ./src/app/app.component.html file và thêm vào dòng code dưới đây:
+
+ <img src="https://i.imgur.com/vssJf8Y.png"><br> 
+ 
+ Bây giờ chạy ng serve và mở URL đuợc cung cấp. Có thể nhìn page với tất cả các posts:
+ 
+ 
+ <img src="https://viblo.asia/uploads/57c8ec35-8ef2-4b38-9d50-822a240ca13e.png"><br> 
+ 
+ . Tuy nhiên, khi bạn view source của URL, nhận thấy toàn bộ nội của page bị thiếu và chỉ <app-root>loading… </ app-root> hiển thị.
+ 
+  <img src="https://viblo.asia/uploads/7e7d971b-d0a6-4766-834f-838439bdd1cb.png"><br> 
+  
+  Đó là do cách Angular hoạt động. Nó sẽ tải bản mẫu cha đầu tiên, sau đó sau đó tải chính nó.
+
+Sau đó nó sẽ bắt đầu quá trình thao tác DOM sẽ chèn nội dung của mỗi trang tiếp theo trong thẻ <app-root>.
+
+Do đó, khi bot công cụ tìm kiếm request trang này, nó sẽ nhận được HTML <app-root><app-root>Loading…</app-root> </ app-root> ở trên và nội dung của trang đã khiến cho nội dung cần SEO không đến đưọc công cụ tìm kiếm.
+
+<h1>Tối ưu hoá công cụ tìm kiếm cho ứng dụng Angular</h1>
+
+Để bắt đầu, chúng ta sẽ cài đặt angular/platform-server package và angular/animations package. Cả hai đều cần yêu cầu để platform server hoạt động chính xác . Platform server sẽ cung cấp server-side rendering.
+
+Chạy command dưới đây trong terminal để cài đặt dependencies require cho server-side rendering của ứng dụng Angular:
+ <img src="https://i.imgur.com/xvCWOE9.png"><br>
+ 
+ Sau khi các packages đã cài đặt thành công NPM, mở ./src/app.modules.ts và thay đổi BrowserModule declaration như dưới đây:<br>
+  <img src="https://i.imgur.com/tuciN4Z.png"><br>
+  
+  Trong đoạn code phía trên, chúng ta thêm withServerTransition method vào BrowserModule và truyền vào appId trùng với tên ứng dụng blogist. Thêm vào như này nhằm ‘cấu hình một a browser-based application chuyển từ một server-rendered app, nếu có hiển thị trên page’.
+
+Tiếp theo chúng ta sẽ tạo application server module. Tạo một file mới ./src/app/app-server.module.ts
+
+  <img src="https://i.imgur.com/lSoRy2L.png"><br>
+  
+  Đây là một Angular module cơ bản sẽ hoạt động như server module. Điều lớn nhất cần chú ý là ở trên chúng ta import AppModule trong server module để nó sẽ là một phần của AppServerModule. Module này sẽ nơi chúng ta phát triển ứng dụng từ server.
